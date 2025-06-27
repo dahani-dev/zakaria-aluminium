@@ -31,7 +31,7 @@ type AddProject = z.infer<typeof projectSchema>;
 // --- Second form schema and type ---
 const validationSchema = z.object({
   nClient: z.string().nonempty("Nom du client requis"),
-  paymentType: z.enum(["ht", "ttc"], { required_error: "Type requis" }),
+  paymentType: z.enum(["ht", "ttc"], "Type requis"),
 });
 type ValidationForm = z.infer<typeof validationSchema>;
 
