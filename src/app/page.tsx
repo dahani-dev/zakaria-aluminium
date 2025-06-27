@@ -1,4 +1,3 @@
-/* eslint-disable prefer-const */
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -6,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { z } from "zod/v4";
-import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
+import { PDFDocument, rgb, StandardFonts, PDFFont } from "pdf-lib";
 
 // type of Measurements
 type Measurements = {
@@ -40,7 +39,7 @@ const PHONE_NUMBER = "0681864577";
 
 // Utility to sanitize text for pdf-lib (fix WinAnsi encoding error)
 function sanitizePdfText(text: string) {
-  return text.replace(/[\u202F\u00A0]/g, " ").replace(/[^\x00-\x7F]/g, ""); // Remove non-ascii (WinAnsi) chars
+  return text.replace(/[\u202F\u00A0]/g, " ").replace(/[^\x00-\x7F]/g, "");
 }
 
 // Utility to wrap text for PDF columns
@@ -52,11 +51,11 @@ function wrapText({
 }: {
   text: string;
   maxWidth: number;
-  font: any;
+  font: PDFFont;
   fontSize: number;
 }): string[] {
   const words = text.split(" ");
-  let lines: string[] = [];
+  const lines: string[] = [];
   let currentLine = "";
 
   for (const word of words) {
@@ -123,7 +122,6 @@ const Home = () => {
   // Add or update
   const onSubmit: SubmitHandler<AddProject> = async (data) => {
     if (editId !== null) {
-      // update
       setMeasurements((prev) =>
         prev.map((item) =>
           item.id === editId
@@ -142,7 +140,6 @@ const Home = () => {
       setEditId(null);
       toast.success("Modifié avec succès");
     } else {
-      // add
       const newElement: Measurements = {
         id: Date.now(),
         designation: data.designation,
@@ -283,7 +280,7 @@ const Home = () => {
       let total = 0;
       const rowY = y;
       const designationColX = 40;
-      const designationMaxWidth = 75; // adjust as needed for your table!
+      const designationMaxWidth = 75;
       const fontSize = 10;
       let idxOffset = 0;
 
