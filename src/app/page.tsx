@@ -13,7 +13,7 @@ type Measurements = {
   hauteur: number;
   largeur: number;
   quantite: number;
-  pu: number;
+  metreCarre: number;
   prix: number;
 };
 
@@ -22,7 +22,7 @@ const projectSchema = z.object({
   hauteur: z.number("expected number").min(1),
   largeur: z.number("expected number").min(1),
   quantite: z.number("expected number").min(1),
-  pu: z.number("expected number").min(1),
+  metreCarre: z.number("expected number").min(1),
 });
 type AddProject = z.infer<typeof projectSchema>;
 
@@ -92,8 +92,9 @@ const Home = () => {
                 hauteur: data.hauteur,
                 largeur: data.largeur,
                 quantite: data.quantite,
-                pu: data.pu,
-                prix: data.hauteur * data.largeur * data.pu * data.quantite,
+                metreCarre: data.metreCarre,
+                prix:
+                  data.hauteur * data.largeur * data.metreCarre * data.quantite,
               }
             : item
         )
@@ -107,8 +108,8 @@ const Home = () => {
         hauteur: data.hauteur,
         largeur: data.largeur,
         quantite: data.quantite,
-        pu: data.pu,
-        prix: data.hauteur * data.largeur * data.pu * data.quantite,
+        metreCarre: data.metreCarre,
+        prix: data.hauteur * data.largeur * data.metreCarre * data.quantite,
       };
       setMeasurements((prev) => [...prev, newElement]);
       toast.success("Ajout réussi");
@@ -132,7 +133,7 @@ const Home = () => {
       setValue("hauteur", item.hauteur);
       setValue("largeur", item.largeur);
       setValue("quantite", item.quantite);
-      setValue("pu", item.pu);
+      setValue("metreCarre", item.metreCarre);
       setEditId(id);
     }
   };
@@ -329,7 +330,7 @@ const Home = () => {
           `${item.hauteur} cm`,
           `${item.largeur} cm`,
           `${item.quantite}`,
-          `${item.pu}`,
+          `${(item.hauteur * item.largeur * item.metreCarre) / 10000}`,
           `${(item.prix / 10000).toFixed(2)} DH`,
         ];
 
@@ -599,19 +600,21 @@ const Home = () => {
             </div>
             <div>
               <label
-                htmlFor="pu"
+                htmlFor="metreCarre"
                 className="block mb-2 text-sm font-medium text-white"
               >
                 Mètre carré
               </label>
               <input
                 type="number"
-                id="pu"
+                id="metreCarre"
                 className="bg-gray-700 border rounded-lg w-full p-2.5 outline-none border-none"
                 placeholder="La valeur en centimètre"
-                {...register("pu", { valueAsNumber: true })}
+                {...register("metreCarre", { valueAsNumber: true })}
               />
-              <p className="mb-1 text-red-500 text-sm">{errors.pu?.message}</p>
+              <p className="mb-1 text-red-500 text-sm">
+                {errors.metreCarre?.message}
+              </p>
             </div>
           </div>
         </div>
